@@ -99,10 +99,10 @@ for conversation in d:
 	counts['total'] +=1
 	# print('Done ' + str(counts['total']) + ' of ' + str(data_size))
 
-with open('filtered_data.json', 'w') as outfile:
-    json.dump(d, outfile)
+# with open('filtered_data.json', 'w') as outfile:
+#     json.dump(d, outfile)
 
-with open('precategorised_data','w') as outfile:
+with open('precategorised_data.json','w') as outfile:
 	json.dump(result, outfile)
 # print(('utterances: %d')%len(filtered_utterances))
 

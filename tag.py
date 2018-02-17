@@ -122,7 +122,6 @@ while (counts['clean'] + counts['offensive'] + counts['hate'] + counts['nonsense
 		d[conversation],utterance_count = annotate_conversation(d[conversation])
 	#annotated_count -= utterance_count
 	tagged_conversations.append( d[conversation])
-	conversation +=1
 	print('')
 	print('End of dialogue. Update of utterance counts:')
 	print('Nonsense count: ' + str(counts['nonsense']) + '  Clean count: ' + str(counts['clean']))
@@ -131,9 +130,11 @@ while (counts['clean'] + counts['offensive'] + counts['hate'] + counts['nonsense
 	print('Totaling: ' + str(counts['skipped'] + counts['clean'] + counts['offensive'] + counts['hate'] + counts['nonsense']))
 	print('Tagged conversation Num: {}'.format(conversation))
 	print('')
+	conversation +=1
+
 
 print('')
-print('Last Tagged conversation Num: {}\n'.format(conversation))
+print('Last Tagged conversation Num: {}\n'.format((conversation-1)))
 
 
 

@@ -106,7 +106,7 @@ with open(infile) as json_data:
 
 d = data['hatespeech'] + data['offensive'] + data['clean']
 
-annotated_count = 20
+annotated_count = 500
 
 
 conversation = start_conversation

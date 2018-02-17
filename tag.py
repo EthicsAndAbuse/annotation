@@ -59,7 +59,7 @@ def annotate_utterance(utterance):
 		print('utterance seen before, skipping...')
 	else:
 		cmd = ''
-		while cmd not in ['1','2','3','4']:
+		while cmd not in ['1','2','3','4','q']:
 			print('')
 			cmd = raw_input('choose 1 = non abusive, 2 = offensive, 3 = hate, 4 = nonsense, q = save to disk and quit\n')
 			if (cmd == '1'):

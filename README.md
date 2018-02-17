@@ -19,5 +19,11 @@ Run tag.py to annotate code:
 
         'python tag.py precategorised_data.json <your name>'
 
+If you already have an annotated file, and remember the number of utterances you've annotated previously, run this to continue with the annotation:
+	
+	'python tag.py precategorised_data.json <your name> <num>'
+
+where num is where you left off last time, because we count the conversations starting from 0.
+
 if you don't feel like annotating the whole 500 things then enter q, which will save the annotations done so far.
 Any problem, message on telegram

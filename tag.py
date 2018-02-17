@@ -1,19 +1,43 @@
 import json, sys
+import os
+
+
 infile = sys.argv[1]
 annotator = sys.argv[2]
-outfile = 'annotated_' + annotator + '.json'
+start_conversation = 0
+if len(sys.argv) == 4:
+	start_conversation = int(sys.argv[3])
 
-print('\n')
+outfile_name = 'annotated_' + annotator + '.json'
+
+
+
 
 clean = []
 offensive = []
 hatespeech = []
 tagged_conversations = []
 
-counts = {'offensive':0,'hate':0,'clean':0,'nonsense':0}
+counts = {'offensive':0,'hate':0,'clean':0,'nonsense':0, 'skipped':0}
 
-def write_to_disk(outfile):
-	with open(outfile, 'w') as outfile:
+if os.path.isfile(outfile_name) :
+	with open(outfile_name, 'r') as outfile:
+		tagged_conversations = json.load(outfile)
+
+if len(tagged_conversations):
+	print('Loaded {} conversations from {}'.format(len(tagged_conversations),outfile_name))
+
+if start_conversation > 0:
+	print('You want to start from {}.'.format(start_conversation))
+
+if len(tagged_conversations) != start_conversation:
+	print('The start number provided is not correct or your data is wrong')
+	sys.exit()
+
+print('\n')
+
+def write_to_disk(outfile_name):
+	with open(outfile_name, 'w') as outfile:
 		json.dump(tagged_conversations, outfile)
 
 def annotate_utterance(utterance):
@@ -23,12 +47,15 @@ def annotate_utterance(utterance):
 
 	if compressed in clean:
 		utterance['tag'] = 'nonabusive'
+		counts['skipped'] +=1
 		print('utterance seen before, skipping...')
 	elif compressed in offensive:
 		utterance['tag'] = 'offensive'
+		counts['skipped'] +=1
 		print('utterance seen before, skipping...')
 	elif compressed in hatespeech:
 		utterance['tag'] = 'hatespeech'
+		counts['skipped'] +=1
 		print('utterance seen before, skipping...')
 	else:
 		cmd = ''
@@ -52,14 +79,14 @@ def annotate_utterance(utterance):
 				counts['nonsense'] += 1
 			elif (cmd == 'q'):
 				print('quitting... file saved in current state')
-				write_to_disk(outfile)
+				write_to_disk(outfile_name)
 				sys.exit()
 			else:
 				print('wrong command')
 			print('')
 
 	utterance['annotator'] = annotator
-
+	write_to_disk(outfile_name)
 	return utterance
 
 def annotate_conversation(conversation):
@@ -79,30 +106,35 @@ with open(infile) as json_data:
 
 d = data['hatespeech'] + data['offensive'] + data['clean']
 
-annotated_count = 500
+annotated_count = 20
 
 
-conversation = 0
-while annotated_count > 0:
+conversation = start_conversation
+while (counts['clean'] + counts['offensive'] + counts['hate'] + counts['nonsense']) < annotated_count:
 	utterance_count = 0
 	print('*** New dialogue, which has a pretag of: ' + d[conversation]['pretag'] + ' ***')
 	#make sure that the hate and offensive are annotated first and put into the output array
 	if d[conversation]['pretag'] == 'hatespeech':
 		d[conversation],utterance_count = annotate_conversation(d[conversation])
-		tagged_conversations.append( d[conversation])
 	elif d[conversation]['pretag'] == 'offensive':
 		d[conversation],utterance_count = annotate_conversation(d[conversation])
 	elif d[conversation]['pretag'] == 'clean':
 		d[conversation],utterance_count = annotate_conversation(d[conversation])
-	annotated_count -= utterance_count
+	#annotated_count -= utterance_count
 	tagged_conversations.append( d[conversation])
 	conversation +=1
 	print('')
 	print('End of dialogue. Update of utterance counts:')
 	print('Nonsense count: ' + str(counts['nonsense']) + '  Clean count: ' + str(counts['clean']))
 	print('Offensive count: ' + str(counts['offensive']) + '  Hate speech count: ' + str(counts['hate']))
-	print('Totaling: ' + str(counts['clean'] + counts['offensive'] + counts['hate'] + counts['nonsense']))
+	print('Skipped count: ' + str(counts['skipped']))
+	print('Totaling: ' + str(counts['skipped'] + counts['clean'] + counts['offensive'] + counts['hate'] + counts['nonsense']))
+	print('Tagged conversation Num: {}'.format(conversation))
 	print('')
+
+print('')
+print('Last Tagged conversation Num: {}\n'.format(conversation))
+
 
 
 

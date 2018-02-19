@@ -26,4 +26,15 @@ If you already have an annotated file, and remember the number of utterances you
 where num is where you left off last time, because we count the conversations starting from 0.
 
 if you don't feel like annotating the whole 500 things then enter q, which will save the annotations done so far.
+
+------- RE-ANNOTATION -------------
+
+To run the annotation with the new categories:
+
+	'python tag.py <your name>' 
+
+<your name>: it is CASE SENSITIVE, so put it the SAME as the one you've already annotated 
+
+NB: make a BACK-UP copy of your previously annotated files, just for emergencies.
+
 Any problem, message on telegram

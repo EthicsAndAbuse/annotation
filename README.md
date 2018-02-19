@@ -31,7 +31,7 @@ if you don't feel like annotating the whole 500 things then enter q, which will 
 
 To run the annotation with the new categories:
 
-	'python tag.py <your name>' 
+	'python retag.py <your name>' 
 
 <your name>: it is CASE SENSITIVE, so put it the SAME as the one you've already annotated 
 

@@ -37,4 +37,17 @@ To run the annotation with the new categories:
 
 NB: make a BACK-UP copy of your previously annotated files, just for emergencies.
 
+
+
+----------------------------------------
+Feb, 23
+
+Copy this to annotate:
+	
+	'python tag.py precategorised_data.json <yourname> 400'
+
+After you're done, you should have a file called annotatedMore_yourname.json, send me that please.
+
+
+
 Any problem, message on telegram

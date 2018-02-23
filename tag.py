@@ -8,7 +8,7 @@ start_conversation = 0
 if len(sys.argv) == 4:
 	start_conversation = int(sys.argv[3])
 
-outfile_name = 'annotated_' + annotator + '.json'
+outfile_name = 'annotatedMore_' + annotator + '.json'
 
 
 
@@ -30,9 +30,10 @@ if len(tagged_conversations):
 if start_conversation > 0:
 	print('You want to start from {}.'.format(start_conversation))
 
-if len(tagged_conversations) != start_conversation:
-	print('The start number provided is not correct or your data is wrong')
-	sys.exit()
+# if len(tagged_conversations) != start_conversation:
+# 	print(len(tagged_conversations))
+# 	print('The start number provided is not correct or your data is wrong')
+# 	sys.exit()
 
 print('\n')
 
@@ -54,14 +55,14 @@ def annotate_utterance(utterance):
 		counts['skipped'] +=1
 		print('utterance seen before, skipping...')
 	elif compressed in hatespeech:
-		utterance['tag'] = 'hatespeech'
+		utterance['tag'] = 'sexual/hate'
 		counts['skipped'] +=1
 		print('utterance seen before, skipping...')
 	else:
 		cmd = ''
 		while cmd not in ['1','2','3','4','q']:
 			print('')
-			cmd = raw_input('choose 1 = non abusive, 2 = offensive, 3 = hate, 4 = nonsense, q = save to disk and quit\n')
+			cmd = raw_input('choose 1 = non abusive, 2 = offensive, 3 = sexual/hate, 4 = nonsense, q = save to disk and quit\n')
 			if (cmd == '1'):
 				utterance['tag'] = 'nonabusive'
 				clean.append(compressed)
@@ -71,7 +72,7 @@ def annotate_utterance(utterance):
 				offensive.append(compressed)
 				counts['offensive'] += 1
 			elif (cmd == '3'):
-				utterance['tag'] = 'hatespeech'
+				utterance['tag'] = 'sexual/hate'
 				hatespeech.append(compressed)
 				counts['hate'] += 1
 			elif (cmd =='4'):
@@ -125,7 +126,7 @@ while (counts['clean'] + counts['offensive'] + counts['hate'] + counts['nonsense
 	print('')
 	print('End of dialogue. Update of utterance counts:')
 	print('Nonsense count: ' + str(counts['nonsense']) + '  Clean count: ' + str(counts['clean']))
-	print('Offensive count: ' + str(counts['offensive']) + '  Hate speech count: ' + str(counts['hate']))
+	print('Offensive count: ' + str(counts['offensive']) + '  Sexual/hate speech count: ' + str(counts['hate']))
 	print('Skipped count: ' + str(counts['skipped']))
 	print('Totaling: ' + str(counts['skipped'] + counts['clean'] + counts['offensive'] + counts['hate'] + counts['nonsense']))
 	print('Tagged conversation Num: {}'.format(conversation))
